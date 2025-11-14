@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 const { VueLoaderPlugin } = require('vue-loader');
+const webpack = require('webpack');
 
 module.exports = {
   entry: './src/main.js',
@@ -39,6 +40,14 @@ module.exports = {
   },
   plugins: [
     new VueLoaderPlugin(),
+
+    // Add this DefinePlugin to fix Vue warnings
+    new webpack.DefinePlugin({
+      __VUE_OPTIONS_API__: true,
+      __VUE_PROD_DEVTOOLS__: false,
+      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
+    }),
+
     new ModuleFederationPlugin({
       name: 'cartMFE',
       filename: 'remoteEntry.js',
